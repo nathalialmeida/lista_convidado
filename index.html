@@ -4,29 +4,24 @@
         <meta charset="UTF-8"/>
         <title>Lista de Convidados</title>
     </head>
+
     <body>
         <div id="App">
 
             <h1>Lista de convidados</h1>
-
+            
             <!--Declarando uma lista -->
             <ul id="lista"></ul>
-
+            
             <input id="campo" type="text" placeholder="Digite o nome do convidado"/>
 
             <input id="input" type="text" placeholder="Digite a idade do convidado"/>
 
 
             <button id="botao">Cadastrar</button>
-
+        
         </div>
         <script type="text/javascript">
-            //declarando as váriaves 
-
-            var elLista = document.getElementById("lista");
-            var elCampo = document.getElementById("campo");
-            var elBotao= document.getElementById("botao");
-            var input = document.getElementById('input');
 
             //Foi adicionado em array
             var convidados = [
@@ -36,40 +31,64 @@
                 { id: 4, nome: "Priscila Camargo", idade: 47}
             ];
             
+            //declarando as váriaves 
+            var elLista = document.getElementById("lista");
+            var elCampo = document.getElementById("campo");
+            var elBotao= document.getElementById("botao");
+            var input = document.getElementById('input');
+
+
+            elBotao.onclick = function(){
+                var nome = elCampo.value;
+                var idade = input.value;
+                
+                var id =  convidados.length + 1 ; //faltou adicionar essa parte
+                
+                convidados.push({id:id,nome:nome, idade:idade});
+                elCampo.value = "";
+                input.value = "";
+                
+                listarConvidados();
+            };
+            
+            
             //manipulação dos elementos
             function listarConvidados(){
                 elLista.innerHTML = "";
-                for(convidado of convidados){
+                for(const convidado of convidados){
                     
                     //criação dos elementos
                     var elConvidado = document.createElement("li");
                     var elNome= document.createTextNode(convidado.nome); 
-                    var elinput = document.createTextNode(', ' + convidado.idade +'anos');
+                    var elinput = document.createTextNode(', ' + convidado.idade +' anos');
                     var elid = document.createTextNode(convidado.id + '' + ' -  ');
                     
-        
+                    //excluir elementos
+                    var elExcluir = document.createElement('a');
+                    elExcluir.setAttribute('href','#'); 
+                    elExcluir.onclick = function(){
+                        convidados = convidados.filter(function(item){
+                            return item.nome !== convidado.nome;
+                        });
+                        
+                        listarConvidados();
+                    }
+                    var elExckuirTexto = document.createTextNode(' ' + 'Excluir' + ' ')
+
+                    //adicionar os elementos em seus pais
+                    elExcluir.appendChild(elExckuirTexto);
                     elConvidado.appendChild(elid);
                     elConvidado.appendChild(elNome);
                     elConvidado.appendChild(elinput);
+                    elConvidado.appendChild(elExcluir); 
                     elLista.appendChild(elConvidado);
                 }
             }
 
             listarConvidados();
 
-            var adicionarConvidado = function(){
-                var nome = elCampo.value;
-                var idade = input.value;
-                var id =  convidados.length +1 ; //faltou adicionar essa parte
-                
-                convidados.push({id:id,nome:nome, idade:idade});
-                elCampo.value = "";
-                input.value = "";
-            
-                listarConvidados();
-            }
+          
 
-            elBotao.onclick = adicionarConvidado;
         </script>
     </body>
 </html>
